@@ -1,20 +1,11 @@
 <script>
-import Schedule from "@/Pages/Schedule.vue";
+import Schedule from "@/components/Pages/Schedule.vue";
 import {StudentsApi} from "@/api/StudentsApi/index.js";
 
 export default {
   name: 'MainPage',
-  components: {Schedule},
-  data(){
-    return {
-
-    }
-  },
-  methods: {
-
-  },
-  computed: {
-
+  components: {
+    Schedule
   },
   async created() {
     let info = []
@@ -23,8 +14,6 @@ export default {
     info.forEach((value , index , array) => {
       const name = (value.name)
     })
-  },
-  mounted() {
   }
 }
 
@@ -43,6 +32,7 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .schedule{
   display: flex;
   justify-content: center;

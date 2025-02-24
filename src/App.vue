@@ -1,6 +1,6 @@
 <script >
 import {defineComponent} from "vue";
-import MainPage from "@/Pages/MainPage.vue";
+import MainPage from "@/components/Pages/MainPage.vue";
 
 export default defineComponent({
   components: {MainPage}
@@ -9,7 +9,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
+  <div class="MainPageWrapper">
     <MainPage/>
   </div>
 </template>

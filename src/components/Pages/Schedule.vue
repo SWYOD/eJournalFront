@@ -47,7 +47,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .vgt-wrap{
   width: 90vw;
