@@ -10,21 +10,19 @@ export default {
     const password = ref('');
 
     const handleLogin = async () => {
-      await router.push('/schedule');
+      try {
+        const response = await axios.post('https://swyod-ejournal--af55.twc1.net/api#/Authentication/AuthController_login', {
+          username: username.value,
+          password: password.value,
+        });
 
-      // try {
-      //   const response = await axios.post('/api/login', {
-      //     username: username.value,
-      //     password: password.value,
-      //   });
-      //
-      //   if (response.data.token) {
-      //     localStorage.setItem('token', response.data.token);
-      //     await router.push('/schedule');
-      //   }
-      // } catch (error) {
-      //   console.error('Ошибка авторизации:', error);
-      // }
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+          await router.push('/schedule');
+        }
+      } catch (error) {
+        console.error('Ошибка авторизации:', error);
+      }
     };
 
     return { username, password, handleLogin };
