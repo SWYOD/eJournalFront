@@ -1,12 +1,8 @@
 <script >
 import {defineComponent} from "vue";
-import MainPage from "@/components/Pages/MainPage.vue";
-import LoginPage from "@/components/LoginPage.vue";
 
 export default defineComponent({
   components: {
-    MainPage,
-    LoginPage
   }
 })
 

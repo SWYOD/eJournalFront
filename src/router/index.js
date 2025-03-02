@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '@/components/LoginPage.vue';
-import Schedule from '@/components/SchedulePage.vue';
+import Login from '@/components/LoginPage/LoginPage.vue';
+import Schedule from '@/components/SchedulePage/SchedulePage.vue';
 
 const routes = [
     { path: '/', component: Login, meta: { requiresAuth: false } },

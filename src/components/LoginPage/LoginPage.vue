@@ -2,8 +2,11 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import LoginPageFormInput from "@/components/LoginPage/LoginPageFormInput.vue";
+import LoginPageFormButton from "@/components/LoginPage/LoginPageFormButton.vue";
 
 export default {
+  components: {LoginPageFormButton, LoginPageFormInput},
   setup() {
     const router = useRouter();
     const username = ref('');
@@ -11,13 +14,15 @@ export default {
 
     const handleLogin = async () => {
       try {
-        const response = await axios.post('https://swyod-ejournal--af55.twc1.net/api#/Authentication/AuthController_login', {
+        const response = await axios.post('https://swyod-ejournal--af55.twc1.net/auth/login', {
           username: username.value,
           password: password.value,
         });
 
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
+        if (response.data.access_token) {
+          localStorage.setItem('token', response.data.access_token);
+          localStorage.setItem('userId', response.data.user.dataValues.id);
+          localStorage.setItem('userGroupId', response.data.user.dataValues.groupId);
           await router.push('/schedule');
         }
       } catch (error) {
@@ -33,15 +38,15 @@ export default {
 <template>
   <main class="main-login">
     <form class="login-form" @submit.prevent="handleLogin">
-      <img class="logo" src="@/assets/icons/MainLogo.svg" alt="Лого">
+      <img class="logo" src="../../assets/icons/MainLogo.svg" alt="Лого">
       <div class="form-title">Электронный журнал студента</div>
       <div class="input-wrapper">
-        <input v-model="username" type="text" placeholder="Логин">
-        <input v-model="password" type="password" placeholder="Пароль">
+        <LoginPageFormInput v-model="username" type="text" placeholder="Логин"/>
+        <LoginPageFormInput v-model="password" type="password"  placeholder="Пароль"/>
       </div>
       <div class="buttons-wrapper">
-        <button id="register-button">Регистрация</button>
-        <button id="login-button" type="submit">Войти</button>
+        <LoginPageFormButton text="Регистрация" type="button"/>
+        <LoginPageFormButton text="Войти" type="submit"/>
       </div>
     </form>
   </main>
@@ -91,37 +96,6 @@ export default {
   gap: 15px;
 }
 
-.login-form input {
-  border: 1px solid #98B8CB;
-  padding: 10px;
-  border-radius: 12px;
-  color: #1E465D;
-  height: 15px;
-  font-weight: 500;
-  font-family: Montserrat;
-}
-#login-button {
-  border: 1px solid transparent;
-  border-radius: 12px;
-  color: #1E465D;
-  background: #7EB8D38C;
-  cursor: pointer;
-  height: 35px;
-  font-family: Montserrat;
-  font-weight: 500;
-}
-#register-button {
-  border: 1px solid #98B8CB;
-  color: #1E465D;
-  border-radius: 12px;
-  cursor: pointer;
-  height: 35px;
-  font-family: Montserrat;
-  font-weight: 500;
-}
-#register-button:hover, #login-button:hover {
-  background: #7EB8D3;
-}
 .buttons-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
