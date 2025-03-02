@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/LoginPage/LoginPage.vue';
 import Schedule from '@/components/SchedulePage/SchedulePage.vue';
+import RegisterPage from "@/components/RegisterPage/RegisterPage.vue";
 
 const routes = [
     { path: '/', component: Login, meta: { requiresAuth: false } },
     { path: '/schedule', component: Schedule, meta: { requiresAuth: true } },
+    { path: '/register', component: RegisterPage, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

@@ -1,11 +1,11 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import axios from "axios";
-import date from "vue-good-table-next/src/components/types/date.js";
 
 const userId = localStorage.getItem("userId");
 const token = localStorage.getItem("token");
 const username = ref('');
+const userIcon = ref('');
 
 onMounted(async () => {
   try {
@@ -15,9 +15,15 @@ onMounted(async () => {
       }
     });
     username.value = response.data.name;
+    if (response.data.image) {
+      userIcon.value = response.data.image;
+    } else {
+      userIcon.value = '@/assets/icons/DefaultUserIcon.svg';
+    }
   } catch (error) {
     console.log(error);
   }
+  console.log(userIcon.value);
 })
 </script>
 
@@ -26,7 +32,9 @@ onMounted(async () => {
     <img class="logo" src="../../assets/icons/MainLogoWhite.svg">
     <div class="user-profile">
       <p class="user-name">{{username}}</p>
-      <img class="user-icon" src="" alt="Иконка профиля">
+      <div class="user-icon-wrapper">
+        <img class="user-icon" :src="userIcon.value">
+      </div>
     </div>
   </header>
 </template>
@@ -38,6 +46,7 @@ onMounted(async () => {
     display: flex;
     justify-content: space-between;
     align-content: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 3px 1px;
   }
 
   .user-profile {
@@ -52,6 +61,14 @@ onMounted(async () => {
   .user-icon {
     height: 65px;
     width: 65px;
+    border-radius: 50%;
+  }
+
+  .user-icon-wrapper {
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+    background: #D9D9D9;
   }
 
 </style>

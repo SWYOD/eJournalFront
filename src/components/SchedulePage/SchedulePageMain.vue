@@ -1,17 +1,22 @@
-<script>
+<script setup>
+
 import SchedulePageMainSlider from "@/components/SchedulePage/SchedulePageMainSlider.vue";
 import SchedulePageMainSchedule from "@/components/SchedulePage/SchedulePageMainSchedule.vue";
+import {computed, ref} from "vue";
 
-export default {
-  name: "SchedulePageMain",
-  components: {SchedulePageMainSchedule, SchedulePageMainSlider}
+const week = ref('');
+const getWeek = computed(() => week.value);
+
+function changeWeek(newWeek) {
+  week.value = newWeek
 }
+
 </script>
 
 <template>
   <main class="schedule-main">
-    <SchedulePageMainSlider/>
-    <SchedulePageMainSchedule/>
+    <SchedulePageMainSlider @changeWeek="changeWeek($event)"/>
+    <SchedulePageMainSchedule :week="getWeek"/>
   </main>
 </template>
 

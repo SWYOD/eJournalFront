@@ -30,7 +30,11 @@ export default {
       }
     };
 
-    return { username, password, handleLogin };
+    const handleRegister = () => {
+      router.push('/register');
+    }
+
+    return { username, password, handleLogin, handleRegister };
   },
 };
 </script>
@@ -45,7 +49,7 @@ export default {
         <LoginPageFormInput v-model="password" type="password"  placeholder="Пароль"/>
       </div>
       <div class="buttons-wrapper">
-        <LoginPageFormButton text="Регистрация" type="button"/>
+        <LoginPageFormButton text="Регистрация" type="button" @click="handleRegister"/>
         <LoginPageFormButton text="Войти" type="submit"/>
       </div>
     </form>
@@ -102,6 +106,10 @@ export default {
   justify-content: space-evenly;
   gap: 20px;
   width: 100%;
+}
+button[type="button"] {
+  background: transparent;
+  border: #98B8CB solid 1px;
 }
 
 </style>

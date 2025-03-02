@@ -1,24 +1,7 @@
-<script>
+<script setup>
 import SchedulePageHeader from "@/components/SchedulePage/SchedulePageHeader.vue";
 import SchedulePageMain from "@/components/SchedulePage/SchedulePageMain.vue";
 
-export default {
-  name: "SchedulePage",
-  components: {SchedulePageMain, SchedulePageHeader},
-  methods: {
-    getNextWeek(curWeek) {
-
-    },
-    getPrevWeek(curWeek) {
-
-    }
-  },
-  computed: {
-    week() {
-
-    }
-  }
-}
 </script>
 
 <template>

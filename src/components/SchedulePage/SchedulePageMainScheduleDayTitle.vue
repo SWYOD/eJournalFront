@@ -14,11 +14,15 @@ defineProps([
 
 <style scoped>
   .schedule-day-title {
-    display: grid;
+    color: #98B8CB;
+    display: flex;
     grid-template-columns: 2fr 1fr;
-    place-items: center;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
     background: #ECF5F9;
-    border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 3px 1px inset;
+    border-radius: 10px;
+    border: #98B8CB solid 1px;
   }
 </style>
