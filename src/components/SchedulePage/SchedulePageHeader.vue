@@ -1,11 +1,15 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import {useRouter} from "vue-router";
 
 const userId = localStorage.getItem("userId");
 const token = localStorage.getItem("token");
 const username = ref('');
 const userIcon = ref('');
+const router = useRouter();
+
+const openProfile = () => router.push('/profile');
 
 onMounted(async () => {
   try {
@@ -14,7 +18,7 @@ onMounted(async () => {
         Authorization: `Bearer ${token}`
       }
     });
-    username.value = response.data.name;
+    username.value = localStorage.getItem("username");
     if (response.data.image) {
       userIcon.value = response.data.image;
     } else {
@@ -23,14 +27,13 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
-  console.log(userIcon.value);
 })
 </script>
 
 <template>
   <header class="schedule-header">
     <img class="logo" src="../../assets/icons/MainLogoWhite.svg">
-    <div class="user-profile">
+    <div class="user-profile" @click="openProfile">
       <p class="user-name">{{username}}</p>
       <div class="user-icon-wrapper">
         <img class="user-icon" :src="userIcon.value">

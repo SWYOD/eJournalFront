@@ -3,18 +3,20 @@
 import SchedulePageMainSlider from "@/components/SchedulePage/SchedulePageMainSlider.vue";
 import SchedulePageMainSchedule from "@/components/SchedulePage/SchedulePageMainSchedule.vue";
 import {computed, ref} from "vue";
+import SchedulePageLessonPopup from "@/components/SchedulePage/SchedulePageLessonPopup.vue";
 
 const week = ref('');
 const getWeek = computed(() => week.value);
 
 function changeWeek(newWeek) {
-  week.value = newWeek
+  week.value = newWeek;
 }
 
 </script>
 
 <template>
   <main class="schedule-main">
+    <SchedulePageLessonPopup/>
     <SchedulePageMainSlider @changeWeek="changeWeek($event)"/>
     <SchedulePageMainSchedule :week="getWeek"/>
   </main>

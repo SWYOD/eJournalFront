@@ -12,6 +12,7 @@ export default {
 </template>
 
 <style scoped>
+
 .LoginPageFormButton {
   border: 1px solid transparent;
   border-radius: 12px;
@@ -25,4 +26,5 @@ export default {
 .LoginPageFormButton:hover {
   background: #7EB8D3;
 }
+
 </style>

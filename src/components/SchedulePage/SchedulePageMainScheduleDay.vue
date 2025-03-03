@@ -1,7 +1,6 @@
 <script setup>
 import SchedulePageMainScheduleLesson from "@/components/SchedulePage/SchedulePageMainScheduleLesson.vue";
 import SchedulePageMainScheduleDayTitle from "@/components/SchedulePage/SchedulePageMainScheduleDayTitle.vue";
-import {onMounted} from "vue";
 
 const props = defineProps([
     'day',
@@ -25,6 +24,9 @@ const props = defineProps([
           :time-end="lesson.timeEnd"
           :subject="lesson.subjectName"
           :type="lesson.subjectType"
+          :date="props.date"
+          :day="props.day"
+          :month="props.month"
       />
     </div>
   </div>

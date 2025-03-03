@@ -22,6 +22,7 @@ export default {
         if (response.data.access_token) {
           localStorage.setItem('token', response.data.access_token);
           localStorage.setItem('userId', response.data.user.dataValues.id);
+          localStorage.setItem('username', response.data.user.dataValues.name);
           localStorage.setItem('userGroupId', response.data.user.dataValues.groupId);
           await router.push('/schedule');
         }
@@ -34,7 +35,7 @@ export default {
       router.push('/register');
     }
 
-    return { username, password, handleLogin, handleRegister };
+    return { username, password, handleLogin, handleRegister, router };
   },
 };
 </script>
@@ -111,5 +112,4 @@ button[type="button"] {
   background: transparent;
   border: #98B8CB solid 1px;
 }
-
 </style>
