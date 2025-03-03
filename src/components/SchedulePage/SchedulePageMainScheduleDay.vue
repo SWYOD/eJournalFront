@@ -44,7 +44,7 @@ const props = defineProps([
   }
   .schedule-lessons-wrapper {
     display: grid;
-    grid-auto-rows: auto;
+    grid-auto-rows: min-content;
     gap: 10px;
   }
 </style>
