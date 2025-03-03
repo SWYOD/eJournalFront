@@ -19,8 +19,8 @@ onMounted(async () => {
       }
     });
     username.value = localStorage.getItem("username");
-    if (response.data.image) {
-      userIcon.value = response.data.image;
+    if (response.data.avatar) {
+      userIcon.value = response.data.avatar;
     } else {
       userIcon.value = '@/assets/icons/DefaultUserIcon.svg';
     }
@@ -36,7 +36,7 @@ onMounted(async () => {
     <div class="user-profile" @click="openProfile">
       <p class="user-name">{{username}}</p>
       <div class="user-icon-wrapper">
-        <img class="user-icon" :src="userIcon.value">
+        <img class="user-icon" :src="'https://s3.timeweb.cloud/30489bee-ejournal/' + userIcon" alt="Аватар">
       </div>
     </div>
   </header>
@@ -54,7 +54,7 @@ onMounted(async () => {
 
   .user-profile {
     display: grid;
-    grid-template-columns: 1fr 65px;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     align-items: center;
     margin-right: 10px;
@@ -62,16 +62,17 @@ onMounted(async () => {
   }
 
   .user-icon {
-    height: 65px;
-    width: 65px;
     border-radius: 50%;
+    width: 100%;
+    height: auto;
   }
 
   .user-icon-wrapper {
-    height: 65px;
-    width: 65px;
+    width: clamp(15px, 50px, 65px);
+    height: clamp(15px, 50px, 65px);
     border-radius: 50%;
     background: #D9D9D9;
+    align-content: center;
   }
 
 </style>

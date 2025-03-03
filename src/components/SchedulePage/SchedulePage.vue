@@ -14,7 +14,7 @@ import SchedulePageMain from "@/components/SchedulePage/SchedulePageMain.vue";
 <style scoped>
 .grid-wrapper {
   display: grid;
-  grid-template-rows: 75px 1fr;
+  grid-template-rows: 7vh 1fr;
   height: 100%;
   width: 100%;
 }

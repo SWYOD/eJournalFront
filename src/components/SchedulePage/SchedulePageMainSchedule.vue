@@ -20,6 +20,6 @@ const props = defineProps([
   .schedule {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 40px;
+    gap: 30px;
   }
 </style>

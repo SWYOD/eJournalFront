@@ -12,6 +12,8 @@ const username = ref('');
 const name = ref('');
 const surname = ref('');
 const email = ref('');
+const avatar = ref('');
+const cover = ref('');
 
 
 onMounted(async () => {
@@ -23,19 +25,23 @@ onMounted(async () => {
     name.value = response.data.first_name;
     surname.value = response.data.second_name;
     email.value = response.data.email;
+    avatar.value = response.data.avatar;
+    cover.value = response.data.cover;
 
   } catch (error) {
     console.log(error)
   }
+
 })
+
 </script>
 
 <template>
  <main class="profile-page-main">
   <div class="profile-page-content-grid">
-    <div class="profile-page-cover">
+    <div class="profile-page-cover"  :style="{ backgroundImage: `url('https://s3.timeweb.cloud/30489bee-ejournal/${cover}')` }">
       <div class="profile-page-user-icon">
-
+        <img class="avatar" :src="'https://s3.timeweb.cloud/30489bee-ejournal/' + avatar" alt="Аватар">
       </div>
     </div>
     <div class="profile-page-content">
@@ -72,7 +78,6 @@ onMounted(async () => {
 }
 .profile-page-cover{
   width: 100%;
-  background: url("@/assets/images/Cover.png") no-repeat center center;
   border-top-right-radius: calc(40px);
   border-top-left-radius: calc(40px);
 }
@@ -85,23 +90,32 @@ onMounted(async () => {
   top: 65px;
   left: 50px;
   border: 3px solid #ffffff;
+  overflow: hidden;
 }
 
 .profile-page-content {
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  padding: 20px;
+  grid-template-rows: 3vw 1fr;
+  padding: 124px 20px 20px;
   gap: 20px;
 }
 .profile-page-content-username {
-  font-weight: 500;
-  font-size: 25px;
+  height: fit-content;
+  font-weight: 400;
+  font-size: 96px;
   line-height: 30px;
-  color: #1E465D;
+  color: #000000;
+
 }
 .profile-page-content-data {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
 }
+.avatar{
+  width: 100%;
+  height: auto;
+}
+
+
 </style>
