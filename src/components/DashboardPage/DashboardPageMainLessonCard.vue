@@ -1,11 +1,14 @@
 <script setup>
-defineProps({ lesson: Object })
+defineProps({
+  lesson: {
+    type: Object,
+    required: true,
+  }
+})
 </script>
 
 <template>
-  <div :class="['lesson-card',
-    lesson.isCurrent ? 'current' : 'inactive',
-    lesson.isPrevious ? 'previous' : '']">
+  <div :class="['lesson-card', lesson.status || 'inactive']">
     <div class="lesson-header">
       <span class="lesson-group">{{ lesson.group }}</span>
       <span class="lesson-time">{{ lesson.time }}</span>
