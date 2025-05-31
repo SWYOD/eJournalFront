@@ -1,7 +1,6 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import LoginPageFormInput from "@/components/LoginPage/LoginPageFormInput.vue";
 import LoginPageFormButton from "@/components/LoginPage/LoginPageFormButton.vue";
 import {DefaultApiInstance} from "@/api/index.js";

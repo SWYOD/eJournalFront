@@ -3,6 +3,7 @@
 import DashboardPageMainChart from "@/components/DashboardPage/DashboardPageMainChart.vue";
 import DashboardPageMainMessages from "@/components/DashboardPage/DashboardPageMainMessages.vue";
 import DashboardPageMainSchedule from "@/components/DashboardPage/DashboardPageMainSchedule.vue";
+import DashboardPageMainLessonSlider from "@/components/DashboardPage/DashboardPageMainLessonSlider.vue";
 </script>
 
 <template>
@@ -10,7 +11,9 @@ import DashboardPageMainSchedule from "@/components/DashboardPage/DashboardPageM
     <div class="chart-item">
       <DashboardPageMainChart></DashboardPageMainChart>
     </div>
-    <div class="lesson-item">2</div>
+    <div class="lesson-slider-item">
+      <DashboardPageMainLessonSlider></DashboardPageMainLessonSlider>
+    </div>
     <div class="schedule-item">
       <DashboardPageMainSchedule></DashboardPageMainSchedule>
     </div>
@@ -31,7 +34,7 @@ import DashboardPageMainSchedule from "@/components/DashboardPage/DashboardPageM
 .chart-item {
   grid-column: span 3;
 }
-.lesson-item {
+.lesson-slider-item {
   grid-column: span 2;
 }
 .schedule-item {
@@ -43,10 +46,11 @@ import DashboardPageMainSchedule from "@/components/DashboardPage/DashboardPageM
   grid-column: span 1;
 }
 
-.chart-item, .lesson-item, .schedule-item, .message-item{
+.chart-item, .lesson-slider-item, .schedule-item, .message-item{
   background: #ffffff;
   padding: 10px;
   text-align: center;
+  border-radius: 1.38rem;
 }
 
 </style>
