@@ -16,6 +16,7 @@
 .wrapper {
   height: 100%;
   width: 100%;
+  background-color: #ECF5F9;
 }
 
 @font-face {

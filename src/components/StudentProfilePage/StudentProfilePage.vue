@@ -2,13 +2,13 @@
 
 
 import SchedulePageHeader from "@/components/SchedulePage/SchedulePageHeader.vue";
-import ProfilePageMain from "@/components/ProfilePage/ProfilePageMain.vue";
+import StudentProfilePageMain from "@/components/StudentProfilePage/StudentProfilePageMain.vue";
 </script>
 
 <template>
   <div class="grid-wrapper">
     <SchedulePageHeader/>
-    <ProfilePageMain/>
+    <StudentProfilePageMain/>
   </div>
 </template>
 

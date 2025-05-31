@@ -2,13 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/LoginPage/LoginPage.vue';
 import Schedule from '@/components/SchedulePage/SchedulePage.vue';
 import RegisterPage from "@/components/RegisterPage/RegisterPage.vue";
-import ProfilePage from "@/components/ProfilePage/ProfilePage.vue";
+import StudentProfilePage from "@/components/StudentProfilePage/StudentProfilePage.vue";
+import DashboardPage from "@/components/DashboardPage/DashboardPage.vue";
 
 const routes = [
     { path: '/', component: Login, meta: { requiresAuth: false } },
     { path: '/schedule', component: Schedule, meta: { requiresAuth: true } },
     { path: '/register', component: RegisterPage, meta: { requiresAuth: true } },
-    { path: '/profile', component: ProfilePage, meta: { requiresAuth: true } },
+    { path: '/profile', component: StudentProfilePage, meta: { requiresAuth: true } },
+    { path: '/dashboard-page', component: DashboardPage, meta: { requiresAuth: false } }
 ];
 
 const router = createRouter({

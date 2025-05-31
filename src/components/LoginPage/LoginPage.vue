@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import LoginPageFormInput from "@/components/LoginPage/LoginPageFormInput.vue";
 import LoginPageFormButton from "@/components/LoginPage/LoginPageFormButton.vue";
+import {DefaultApiInstance} from "@/api/index.js";
+
 
 export default {
   components: {LoginPageFormButton, LoginPageFormInput},
@@ -14,7 +16,7 @@ export default {
 
     const handleLogin = async () => {
       try {
-        const response = await axios.post('https://swyod-ejournal--af55.twc1.net/auth/login', {
+        const response = await DefaultApiInstance.post(`/auth/login`, {
           username: username.value,
           password: password.value,
         });

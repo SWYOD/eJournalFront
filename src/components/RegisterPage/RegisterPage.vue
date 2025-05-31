@@ -5,6 +5,7 @@ import LoginPageFormButton from "@/components/LoginPage/LoginPageFormButton.vue"
 import {ref} from "vue";
 import axios from "axios";
 import router from "@/router/index.js";
+import {DefaultApiInstance} from "@/api/index.js";
 
 const name = ref('');
 const surname = ref('');
@@ -19,7 +20,7 @@ async function handleRegister() {
     return;
   }
   try {
-    await axios.post('https://swyod-ejournal--af55.twc1.net/students', {
+    await DefaultApiInstance.post('/students', {
       name: username.value,
       first_name: name.value,
       second_name: surname.value,

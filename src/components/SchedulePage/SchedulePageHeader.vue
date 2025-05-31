@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
+import {DefaultApiInstance} from "@/api/index.js";
 
 const userId = localStorage.getItem("userId");
 const token = localStorage.getItem("token");
@@ -13,7 +14,7 @@ const openProfile = () => router.push('/profile');
 
 onMounted(async () => {
   try {
-    let response = await axios.get('https://swyod-ejournal--af55.twc1.net/students/' + userId, {
+    let response = await DefaultApiInstance.get('/students/' + userId, {
       headers: {
         Authorization: `Bearer ${token}`
       }

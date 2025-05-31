@@ -1,8 +1,8 @@
-import {config, DefaultApiInstance} from "@/api/index.js";
+import {DefaultApiInstance} from "@/api/index.js";
 
 export const StudentsApi = {
     async getStudents(){
-        const res = await DefaultApiInstance.get(`${config.backendIP}/students`)
+        const res = await DefaultApiInstance.get(`/students`)
         return res.data
     }
 }

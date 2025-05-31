@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import {DefaultApiInstance} from "@/api/index.js";
 
 const weekFriday = Date;
 const weekString = ref('');
@@ -82,41 +83,21 @@ async function changeWeek(date = new Date()) {
   };
 
   try {
-    const response = await axios.get(
-        "https://swyod-ejournal--af55.twc1.net/groups/" + userGroupId,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
+    const response = await DefaultApiInstance.get(
+        `/groups/${userGroupId}`,
     );
     for (const lesson of response.data.timetables) {
       const date = new Date(lesson.subjDate);
       const data = {};
       try {
-        const classroom = (await axios.get(
-            "https://swyod-ejournal--af55.twc1.net/classrooms/" + lesson.classroomId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-              }
-            }
+        const classroom = (await DefaultApiInstance.get(
+            '/classrooms/' + lesson.classroomId,
         )).data.number;
-        const teacher = (await axios.get(
-            "https://swyod-ejournal--af55.twc1.net/teachers/" + lesson.teacherId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-              }
-            }
+        const teacher = (await DefaultApiInstance.get(
+            '/teachers/' + lesson.teacherId,
         )).data.name;
-        const subject = (await axios.get(
-            "https://swyod-ejournal--af55.twc1.net/subjects/" + lesson.subjectId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-              }
-            }
+        const subject = (await DefaultApiInstance.get(
+            '/subjects/' + lesson.subjectId,
         )).data;
         data.classroom = classroom;
         data.teacher = teacher;
