@@ -91,13 +91,13 @@ async function changeWeek(date = new Date()) {
       const data = {};
       try {
         const classroom = (await DefaultApiInstance.get(
-            '/classrooms/' + lesson.classroomId,
+            `/classrooms/${lesson.classroomId}`,
         )).data.number;
         const teacher = (await DefaultApiInstance.get(
-            '/teachers/' + lesson.teacherId,
+            `/teachers/${lesson.teacherId}`,
         )).data.name;
         const subject = (await DefaultApiInstance.get(
-            '/subjects/' + lesson.subjectId,
+            `/subjects/${lesson.subjectId}`,
         )).data;
         data.classroom = classroom;
         data.teacher = teacher;
