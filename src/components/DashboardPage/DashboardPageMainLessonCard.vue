@@ -23,33 +23,49 @@ defineProps({
 
 <style scoped>
 
+
 .lesson-card {
   border-radius: 12px;
-  border: 1px solid #98B8CB;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   background-color: #f3f3f3;
-  opacity: 0.5;
-  filter: blur(1px);
-  transform: scale(80%);
   text-align: left;
 }
 
+.lesson-card.next {
+  border: 1px solid #8eafc3;
+  opacity: 0.7;
+  .lecture{
+    background-color: #d4e1f1;
+    color: #114c65;
+  }
+}
 .lesson-card.current {
   background-color: #e6f9ea;
   border: 1px solid #4caf50;
   opacity: 1;
   filter: none;
-  transform: scale(100%);
+  .lecture {
+    background-color: #c8e6c9;
+    color: #256029;
+  }
 }
 .lesson-card.previous {
   background-color: #e6f9ea;
   border: 1px solid #C2C2C2;
-  opacity: 0.5;
+  opacity: 0.7;
   filter: blur(1px);
-  transform: scale(80%);
 }
+
+.lesson-card.previous > * {
+  color: #C2C2C2;
+  .lesson-group{
+    color: #C2C2C2;
+  }
+}
+
+
 
 .lesson-header {
   display: flex;
@@ -63,6 +79,7 @@ defineProps({
   font-weight: bold;
   color: #4caf50;
 }
+
 
 .lesson-time {
   color: #666;

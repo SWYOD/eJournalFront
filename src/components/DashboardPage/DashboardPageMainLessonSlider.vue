@@ -18,7 +18,7 @@ export default {
         {
           id: 2,
           group: 'ТЭО 31',
-          title: 'Проектирование, разработка и оптимизация...',
+          title: 'Проектирование, разработка и оптимизация веб-приложений',
           subtitle: 'Какая-то там тема',
           type: 'Лекция',
           time: '09:45 – 10:30',
@@ -27,7 +27,7 @@ export default {
         {
           id: 3,
           group: 'ТЭО 31',
-          title: 'Проектирование, разработка и оптимизация...',
+          title: 'Проектирование, разработка и оптимизация веб-приложений',
           subtitle: 'Какая-то там тема',
           type: 'Лекция',
           time: '10:30 – 11:50',
@@ -107,7 +107,7 @@ button {
 .cards-wrapper {
   position: relative;
   width: 100%;
-  height: 300px; /* контролируем высоту видимой стопки */
+  height: 30vh; /* контролируем высоту видимой стопки */
 }
 
 /* Абсолютно позиционированные карточки */
@@ -121,28 +121,25 @@ button {
 
 /* Центр — смещаем вверх от bottom */
 .card-current {
-  bottom: 80px; /* центр стопки */
-  transform: translateY(0%);
+  bottom: 10vh; /* центр стопки */
   z-index: 3;
-  opacity: 1;
+ /* opacity: 1;*/
 }
 
 /* Предыдущая выше */
 .card-previous {
-  bottom: 140px;
-  transform: translateY(0%);
+  bottom: 20vh;
   z-index: 2;
-  opacity: 0.5;
-  scale: 0.95;
+  /*opacity: 0.5;*/
+  scale: 0.85;
 }
 
 /* Следующая ниже */
 .card-next {
-  bottom: 20px;
-  transform: translateY(0%);
+  bottom: 0.5vh;
   z-index: 1;
-  opacity: 0.5;
-  scale: 0.95;
+  /*opacity: 0.5;*/
+  scale: 0.85;
 }
 
 </style>
