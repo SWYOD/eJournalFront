@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import axios from "axios";
 import { useRouter } from 'vue-router';
+import {DefaultApiInstance} from "@/api/index.js";
 
 const router = useRouter();
 
@@ -36,7 +36,7 @@ const formatDate = (dateString) => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('https://swyod-ejournal--af55.twc1.net/students/' + localStorage.getItem("userId"));
+    const response = await DefaultApiInstance.get('/students/' + localStorage.getItem("userId"));
 
     username.value = localStorage.getItem("username");
     username.value = response.data.name;
