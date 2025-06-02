@@ -19,12 +19,11 @@ export default {
           username: username.value,
           password: password.value,
         });
-
         if (response.data.access_token) {
           localStorage.setItem('token', response.data.access_token);
-          localStorage.setItem('userId', response.data.user.dataValues.id);
-          localStorage.setItem('username', response.data.user.dataValues.name);
-          localStorage.setItem('userGroupId', response.data.user.dataValues.groupId);
+          localStorage.setItem('userId', response.data.user.id);
+          localStorage.setItem('username', response.data.user.name);
+          localStorage.setItem('userGroupId', response.data.user.groupId);
           await router.push('/schedule');
         }
       } catch (error) {
