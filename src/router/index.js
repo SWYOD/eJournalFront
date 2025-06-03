@@ -1,16 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/LoginPage/LoginPage.vue';
-import Schedule from '@/components/SchedulePage/SchedulePage.vue';
+import Schedule from '@/components/StudentAgent/SchedulePage/SchedulePage.vue';
 import RegisterPage from "@/components/RegisterPage/RegisterPage.vue";
-import StudentProfilePage from "@/components/StudentProfilePage/StudentProfilePage.vue";
-import DashboardPage from "@/components/DashboardPage/DashboardPage.vue";
+import StudentProfilePage from "@/components/StudentAgent/StudentProfilePage/StudentProfilePage.vue";
+import DashboardPage from "@/components/TeacherAgent/DashboardPage/DashboardPage.vue";
+import ScheduleSettingPage from "@/components/TeacherAgent/ScheduleSettingPage/ScheduleSettingPage.vue";
+import JournalPage from "@/components/TeacherAgent/JournalPage/JournalPage.vue";
+import MonitoringPage from "@/components/TeacherAgent/MonitoringPage/MonitoringPage.vue";
 
 const routes = [
     { path: '/', component: Login, meta: { requiresAuth: false } },
     { path: '/schedule', component: Schedule, meta: { requiresAuth: true } },
     { path: '/register', component: RegisterPage, meta: { requiresAuth: true } },
     { path: '/profile', component: StudentProfilePage, meta: { requiresAuth: true } },
-    { path: '/dashboard-page', component: DashboardPage, meta: { requiresAuth: false } }
+    { path: '/dashboard', component: DashboardPage, meta: { requiresAuth: false } },
+    { path: '/journal', component: JournalPage, meta: { requiresAuth: false } },
+    { path: '/scheduleT', component: ScheduleSettingPage, meta: { requiresAuth: false } },
+    { path: '/monitoring', component: MonitoringPage, meta: { requiresAuth: false } },
 ];
 
 const router = createRouter({

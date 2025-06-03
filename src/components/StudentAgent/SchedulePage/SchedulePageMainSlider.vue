@@ -188,24 +188,24 @@ const getNextWeek = async () => {
   .schedule-week-next {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    background: url("../../assets/icons/NextWeek.svg") no-repeat center;
+    background: url("../../../assets/icons/NextWeek.svg") no-repeat center;
   }
   .schedule-week-prev {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    background: url("../../assets/icons/PrevWeek.svg") no-repeat center;
+    background: url("../../../assets/icons/PrevWeek.svg") no-repeat center;
   }
   .schedule-week-prev:hover {
-    background: url("../../assets/icons/PrevWeek.svg") no-repeat center rgba(0, 0, 0, 0.1);
+    background: url("../../../assets/icons/PrevWeek.svg") no-repeat center rgba(0, 0, 0, 0.1);
   }
   .schedule-week-next:hover {
-    background: url("../../assets/icons/NextWeek.svg") no-repeat center rgba(0, 0, 0, 0.1);
+    background: url("../../../assets/icons/NextWeek.svg") no-repeat center rgba(0, 0, 0, 0.1);
   }
   .schedule-week-prev:active {
-    background: url("../../assets/icons/PrevWeek.svg") no-repeat center rgba(0, 0, 0, 0.2);
+    background: url("../../../assets/icons/PrevWeek.svg") no-repeat center rgba(0, 0, 0, 0.2);
   }
   .schedule-week-next:active {
-    background: url("../../assets/icons/NextWeek.svg") no-repeat center rgba(0, 0, 0, 0.2);
+    background: url("../../../assets/icons/NextWeek.svg") no-repeat center rgba(0, 0, 0, 0.2);
   }
 
 

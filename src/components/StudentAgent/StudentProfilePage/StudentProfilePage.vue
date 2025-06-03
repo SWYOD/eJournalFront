@@ -1,13 +1,12 @@
 <script setup>
 
-
-import SchedulePageHeader from "@/components/SchedulePage/SchedulePageHeader.vue";
-import StudentProfilePageMain from "@/components/StudentProfilePage/StudentProfilePageMain.vue";
+import StudentProfilePageMain from "@/components/StudentAgent/StudentProfilePage/StudentProfilePageMain.vue";
+import StudentUIHeader from "@/components/Headers/StudentUIHeader.vue";
 </script>
 
 <template>
   <div class="grid-wrapper">
-    <SchedulePageHeader/>
+    <StudentUIHeader/>
     <StudentProfilePageMain/>
   </div>
 </template>

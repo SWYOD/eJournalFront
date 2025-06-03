@@ -1,9 +1,9 @@
 <script setup>
 
-import SchedulePageMainSlider from "@/components/SchedulePage/SchedulePageMainSlider.vue";
-import SchedulePageMainSchedule from "@/components/SchedulePage/SchedulePageMainSchedule.vue";
+import SchedulePageMainSlider from "@/components/StudentAgent/SchedulePage/SchedulePageMainSlider.vue";
+import SchedulePageMainSchedule from "@/components/StudentAgent/SchedulePage/SchedulePageMainSchedule.vue";
 import {computed, ref} from "vue";
-import SchedulePageLessonPopup from "@/components/SchedulePage/SchedulePageLessonPopup.vue";
+import SchedulePageLessonPopup from "@/components/StudentAgent/SchedulePage/SchedulePageLessonPopup.vue";
 
 const week = ref('');
 const getWeek = computed(() => week.value);

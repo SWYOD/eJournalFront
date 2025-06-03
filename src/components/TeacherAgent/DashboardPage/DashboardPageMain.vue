@@ -1,9 +1,9 @@
 <script setup>
 
-import DashboardPageMainChart from "@/components/DashboardPage/DashboardPageMainChart.vue";
-import DashboardPageMainMessages from "@/components/DashboardPage/DashboardPageMainMessages.vue";
-import DashboardPageMainSchedule from "@/components/DashboardPage/DashboardPageMainSchedule.vue";
-import DashboardPageMainLessonSlider from "@/components/DashboardPage/DashboardPageMainLessonSlider.vue";
+import DashboardPageMainChart from "@/components/TeacherAgent/DashboardPage/DashboardPageMainChart.vue";
+import DashboardPageMainMessages from "@/components/TeacherAgent/DashboardPage/DashboardPageMainMessages.vue";
+import DashboardPageMainSchedule from "@/components/TeacherAgent/DashboardPage/DashboardPageMainSchedule.vue";
+import DashboardPageMainLessonSlider from "@/components/TeacherAgent/DashboardPage/DashboardPageMainLessonSlider.vue";
 </script>
 
 <template>

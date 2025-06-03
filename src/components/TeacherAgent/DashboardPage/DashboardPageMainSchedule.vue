@@ -1,6 +1,6 @@
 <script setup>
 
-import SchedulePageMain from "@/components/SchedulePage/SchedulePageMain.vue";
+import SchedulePageMain from "@/components/StudentAgent/SchedulePage/SchedulePageMain.vue";
 </script>
 
 <template>

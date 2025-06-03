@@ -1,5 +1,5 @@
 <script>
-import DashboardPageMainLessonCard from "@/components/DashboardPage/DashboardPageMainLessonCard.vue";
+import DashboardPageMainLessonCard from "@/components/TeacherAgent/DashboardPage/DashboardPageMainLessonCard.vue";
 
 export default {
   components: { DashboardPageMainLessonCard },

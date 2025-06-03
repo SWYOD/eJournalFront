@@ -1,6 +1,6 @@
 <script setup>
-import SchedulePageMainScheduleLesson from "@/components/SchedulePage/SchedulePageMainScheduleLesson.vue";
-import SchedulePageMainScheduleDayTitle from "@/components/SchedulePage/SchedulePageMainScheduleDayTitle.vue";
+import SchedulePageMainScheduleLesson from "@/components/StudentAgent/SchedulePage/SchedulePageMainScheduleLesson.vue";
+import SchedulePageMainScheduleDayTitle from "@/components/StudentAgent/SchedulePage/SchedulePageMainScheduleDayTitle.vue";
 
 const props = defineProps([
     'day',

@@ -1,7 +1,7 @@
 <script>
 
 
-import LineChart from "@/components/DashboardPage/LineChart.vue";
+import LineChart from "@/components/TeacherAgent/DashboardPage/LineChart.vue";
 
 export default {
   components: { LineChart },
