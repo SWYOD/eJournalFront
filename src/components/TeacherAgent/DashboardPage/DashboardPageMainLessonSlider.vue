@@ -1,58 +1,119 @@
 <script>
 import DashboardPageMainLessonCard from "@/components/TeacherAgent/DashboardPage/DashboardPageMainLessonCard.vue";
+import { DefaultApiInstance } from "@/api/index.js";
 
 export default {
   components: { DashboardPageMainLessonCard },
   data() {
     return {
-      lessons: [
-        {
-          id: 1,
-          group: 'ТЭО 31',
-          title: 'Проектирование, разработка и оптимизация веб-приложений',
-          subtitle: 'Деревья и их применение в программировании',
-          type: 'Лекция',
-          time: '08:00 – 09:45',
-          status: 'previous',
-        },
-        {
-          id: 2,
-          group: 'ТЭО 31',
-          title: 'Проектирование, разработка и оптимизация веб-приложений',
-          subtitle: 'Какая-то там тема',
-          type: 'Лекция',
-          time: '09:45 – 10:30',
-          status: 'current',
-        },
-        {
-          id: 3,
-          group: 'ТЭО 31',
-          title: 'Проектирование, разработка и оптимизация веб-приложений',
-          subtitle: 'Какая-то там тема',
-          type: 'Лекция',
-          time: '10:30 – 11:50',
-          status: 'next',
-        },
-      ],
+      lessons: [],
+      isLoading: false,
+      error: null
     };
   },
   methods: {
-    rotateLessons() {
-      const newLessons = JSON.parse(JSON.stringify(this.lessons));
+    /*rotateLessons() {
+      if (this.lessons.length < 2) return;
 
-      // Находим индексы карточек
+      const newLessons = JSON.parse(JSON.stringify(this.lessons));
       const currentIndex = newLessons.findIndex(l => l.status === 'current');
       const nextIndex = newLessons.findIndex(l => l.status === 'next');
       const prevIndex = newLessons.findIndex(l => l.status === 'previous');
 
-      // Меняем статусы по кругу
+      if (currentIndex === -1 || nextIndex === -1 || prevIndex === -1) {
+        this.initStatuses(newLessons);
+        return;
+      }
+
       newLessons[prevIndex].status = 'next';
       newLessons[currentIndex].status = 'previous';
       newLessons[nextIndex].status = 'current';
 
       this.lessons = newLessons;
+    },*/
+    async fetchLessons(teacherId, page = 1, limit = 3) {
+      try {
+        const response = await DefaultApiInstance.get(`/timetables?page=${page}&limit=${limit}&teacherId=${teacherId}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+        throw error;
+      }
     },
+
+    transformApiData(apiData) {
+      if (!apiData?.data) return this.generateEmptyLessons();
+
+      // Преобразуем данные с сервера
+      const serverLessons = apiData.data.map(lesson => ({
+        id: lesson.id,
+        group: lesson.group?.name || 'Не указана',
+        title: lesson.subject?.name || 'Без названия',
+        subtitle: lesson.description || 'Без описания',
+        type: lesson.subject?.type || 'Занятие',
+        time: `${this.formatTime(lesson.subjDate)} – ${this.formatTime(lesson.endDate)}`,
+        status: this.validateStatus(lesson.status) // Валидируем статус
+      }));
+
+      // Если уроков с сервера достаточно, возвращаем их
+      if (serverLessons.length >= 3) {
+        return serverLessons.slice(0, 3); // Берем первые 3 элемента
+      }
+
+      // Если уроков меньше 3, дополняем пустыми
+      return [...serverLessons, ...this.generateEmptyLessons(3 - serverLessons.length)];
+    },
+
+    generateEmptyLessons(count = 3) {
+      return Array.from({ length: count }, (_, i) => ({
+        id: -i,
+        group: 'Нет данных',
+        title: 'Нет занятий',
+        subtitle: '',
+        type: '',
+        time: '',
+        status: ['current', 'next', 'previous'][i] || 'next'
+      }));
+    },
+
+    validateStatus(status) {
+      const validStatuses = ['current', 'next', 'previous'];
+      return validStatuses.includes(status) ? status : 'next';
+    },
+
+    formatTime(dateString) {
+      if (!dateString) return '';
+
+      try {
+        const normalizedDate = dateString.includes('T')
+            ? dateString
+            : dateString.replace(' ', 'T') + 'Z';
+
+        const date = new Date(normalizedDate);
+        return date.toLocaleTimeString('ru-RU', {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'Europe/Moscow'
+        });
+      } catch (e) {
+        console.error('Error formatting time:', dateString, e);
+        return '--:--';
+      }
+    }
   },
+  async created() {
+    this.isLoading = true;
+    try {
+      const teacherId = localStorage.getItem('userId');
+      const apiData = await this.fetchLessons(teacherId);
+      this.lessons = this.transformApiData(apiData);
+    } catch (error) {
+      this.error = error.message;
+      this.lessons = this.transformApiData({ data: [] });
+    } finally {
+      this.isLoading = false;
+    }
+  }
 };
 </script>
 
