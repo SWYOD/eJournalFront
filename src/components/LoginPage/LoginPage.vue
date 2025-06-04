@@ -21,10 +21,17 @@ export default {
         });
         if (response.data.access_token) {
           localStorage.setItem('token', response.data.access_token);
+          localStorage.setItem('role', response.data.user.role)
           localStorage.setItem('userId', response.data.user.id);
           localStorage.setItem('username', response.data.user.name);
-          localStorage.setItem('userGroupId', response.data.user.groupId);
-          await router.push('/schedule');
+
+          if (response.data.user.role === 'student'){
+            localStorage.setItem('userGroupId', response.data.user.groupId);
+            await router.push('/schedule');
+          }else {
+
+            await router.push('/dashboard');
+          }
         }
       } catch (error) {
         console.error('Ошибка авторизации:', error);
