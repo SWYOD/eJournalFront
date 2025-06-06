@@ -18,7 +18,7 @@ const openMonitoring = () => router.push('/monitoring');
 
 onMounted(async () => {
   try {
-    let response = await DefaultApiInstance.get('/students/' + userId, {
+    let response = await DefaultApiInstance.get('/teachers/' + userId, {
       headers: {
         Authorization: `Bearer ${token}`
       }

@@ -8,32 +8,20 @@ export default {
     return {
       lessons: [],
       isLoading: false,
-      error: null
+      error: null,
+      currentPage: 1,
+      totalPages: 1,
+      teacherId: null,
+      refreshInterval: null,
+      isRefreshing: false
     };
   },
   methods: {
-    /*rotateLessons() {
-      if (this.lessons.length < 2) return;
-
-      const newLessons = JSON.parse(JSON.stringify(this.lessons));
-      const currentIndex = newLessons.findIndex(l => l.status === 'current');
-      const nextIndex = newLessons.findIndex(l => l.status === 'next');
-      const prevIndex = newLessons.findIndex(l => l.status === 'previous');
-
-      if (currentIndex === -1 || nextIndex === -1 || prevIndex === -1) {
-        this.initStatuses(newLessons);
-        return;
-      }
-
-      newLessons[prevIndex].status = 'next';
-      newLessons[currentIndex].status = 'previous';
-      newLessons[nextIndex].status = 'current';
-
-      this.lessons = newLessons;
-    },*/
-    async fetchLessons(teacherId, page = 1, limit = 3) {
+    async fetchLessons(page = 1, limit = 3) {
       try {
-        const response = await DefaultApiInstance.get(`/timetables?page=${page}&limit=${limit}&teacherId=${teacherId}`);
+        const response = await DefaultApiInstance.get(
+            `/timetables?page=${page}&limit=${limit}&teacherId=${this.teacherId}`
+        );
         return response.data;
       } catch (error) {
         console.error('Error fetching lessons:', error);
@@ -42,7 +30,12 @@ export default {
     },
 
     transformApiData(apiData) {
-      if (!apiData?.data) return this.generateEmptyLessons();
+      if (!apiData?.data) return this.generateEmptyTriplet();
+
+      // Сохраняем метаданные пагинации
+      if (apiData.meta) {
+        this.totalPages = apiData.meta.totalPages || 1;
+      }
 
       // Преобразуем данные с сервера
       const serverLessons = apiData.data.map(lesson => ({
@@ -52,28 +45,60 @@ export default {
         subtitle: lesson.description || 'Без описания',
         type: lesson.subject?.type || 'Занятие',
         time: `${this.formatTime(lesson.subjDate)} – ${this.formatTime(lesson.endDate)}`,
-        status: this.validateStatus(lesson.status) // Валидируем статус
+        status: this.validateStatus(lesson.status)
       }));
 
-      // Если уроков с сервера достаточно, возвращаем их
-      if (serverLessons.length >= 3) {
-        return serverLessons.slice(0, 3); // Берем первые 3 элемента
-      }
+      // Находим последнее предыдущее занятие
+      const previous = serverLessons
+          .filter(l => l.status === 'previous')
+          .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))[0];
 
-      // Если уроков меньше 3, дополняем пустыми
-      return [...serverLessons, ...this.generateEmptyLessons(3 - serverLessons.length)];
+      // Находим текущее занятие
+      const current = serverLessons.find(l => l.status === 'current');
+
+      // Находим ближайшее следующее занятие
+      const next = serverLessons
+          .filter(l => l.status === 'next')
+          .sort((a, b) => new Date(a.subjDate) - new Date(b.subjDate))[0];
+
+      // Формируем триплет занятий
+      return [
+        previous || this.generateEmptyLesson('previous'),
+        current || this.generateBreakCard(),
+        next || this.generateEmptyLesson('next')
+      ];
     },
 
-    generateEmptyLessons(count = 3) {
-      return Array.from({ length: count }, (_, i) => ({
-        id: -i,
+    generateBreakCard() {
+      return {
+        id: 0, // Специальный ID для карточки перерыва
+        group: '',
+        title: 'Перерыв',
+        subtitle: 'До следующей пары',
+        type: '',
+        time: '',
+        status: 'current'
+      };
+    },
+
+    generateEmptyLesson(status) {
+      return {
+        id: -Math.floor(Math.random() * 1000),
         group: 'Нет данных',
         title: 'Нет занятий',
         subtitle: '',
         type: '',
         time: '',
-        status: ['current', 'next', 'previous'][i] || 'next'
-      }));
+        status: status
+      };
+    },
+
+    generateEmptyTriplet() {
+      return [
+        this.generateEmptyLesson('previous'),
+        this.generateEmptyLesson('current'),
+        this.generateEmptyLesson('next')
+      ];
     },
 
     validateStatus(status) {
@@ -99,27 +124,76 @@ export default {
         console.error('Error formatting time:', dateString, e);
         return '--:--';
       }
+    },
+
+    async refreshLessons() {
+      if (this.isRefreshing || this.isLoading) return;
+
+      this.isRefreshing = true;
+      try {
+        const apiData = await this.fetchLessons(this.currentPage);
+        const transformed = this.transformApiData(apiData);
+
+        // Проверяем статусы всех уроков
+        const allPrevious = transformed.length > 0 &&
+            transformed.every(lesson => lesson.status === 'previous');
+
+        // Если все уроки стали предыдущими
+        if (allPrevious) {
+          if (this.currentPage < this.totalPages) {
+            // Переход на следующую страницу
+            this.currentPage++;
+          } else {
+            // Возврат к первой странице
+            this.currentPage = 1;
+          }
+
+          // Загружаем новую страницу
+          const nextPageData = await this.fetchLessons(this.currentPage);
+          this.lessons = this.transformApiData(nextPageData);
+        } else {
+          // Просто обновляем текущие данные
+          this.lessons = transformed;
+        }
+      } catch (error) {
+        console.error('Refresh error:', error);
+        this.lessons = this.generateEmptyTriplet();
+      } finally {
+        this.isRefreshing = false;
+      }
     }
   },
   async created() {
     this.isLoading = true;
+    this.teacherId = localStorage.getItem('userId');
+
     try {
-      const teacherId = localStorage.getItem('userId');
-      const apiData = await this.fetchLessons(teacherId);
+      // Первоначальная загрузка данных
+      const apiData = await this.fetchLessons(this.currentPage);
       this.lessons = this.transformApiData(apiData);
     } catch (error) {
       this.error = error.message;
-      this.lessons = this.transformApiData({ data: [] });
+      this.lessons = this.generateEmptyTriplet();
     } finally {
       this.isLoading = false;
     }
+  },
+  mounted() {
+    // Устанавливаем периодическое обновление каждые 30 секунд
+    this.refreshInterval = setInterval(() => {
+      this.refreshLessons();
+    }, 30000);
+  },
+  beforeUnmount() {
+    // Очищаем интервал при уничтожении компонента
+    clearInterval(this.refreshInterval);
   }
 };
 </script>
 
 <template>
   <div class="wrapper">
-    <button @click="rotateLessons">Пролистать</button>
+    <h2> Текущая пара </h2>
     <div class="carousel-container">
       <transition-group name="slide" tag="div" class="cards-wrapper">
         <DashboardPageMainLessonCard
@@ -139,28 +213,16 @@ export default {
   flex-direction: column;
   height: 100%;
   min-height: 500px;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
-}
-
-button {
-  padding: 10px 20px;
-  background: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 20px;
-  align-self: center;
 }
 
 .carousel-container {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-end; /* выравнивание по нижнему краю */
-  padding-bottom: 40px; /* отступ от низа */
+  align-items: flex-end;
+  padding-bottom: 40px;
   position: relative;
   overflow: hidden;
 }
@@ -168,10 +230,9 @@ button {
 .cards-wrapper {
   position: relative;
   width: 100%;
-  height: 30vh; /* контролируем высоту видимой стопки */
+  height: 30vh;
 }
 
-/* Абсолютно позиционированные карточки */
 .cards-wrapper > * {
   position: absolute;
   left: 0;
@@ -180,27 +241,30 @@ button {
   box-sizing: border-box;
 }
 
-/* Центр — смещаем вверх от bottom */
 .card-current {
-  bottom: 10vh; /* центр стопки */
+  bottom: 10vh;
   z-index: 3;
- /* opacity: 1;*/
 }
 
-/* Предыдущая выше */
 .card-previous {
   bottom: 20vh;
   z-index: 2;
-  /*opacity: 0.5;*/
   scale: 0.85;
 }
 
-/* Следующая ниже */
 .card-next {
   bottom: 0.5vh;
   z-index: 1;
-  /*opacity: 0.5;*/
   scale: 0.85;
 }
 
+/* Анимации для плавных переходов */
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-enter-from, .slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
 </style>
