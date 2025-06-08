@@ -1,53 +1,102 @@
-<script>
-import { Line } from 'vue-chartjs';
-import {
-  Chart as ChartJS,
-  Title, Tooltip, Legend,
-  LineElement, LinearScale,
-  PointElement, CategoryScale
-} from 'chart.js';
+<template>
+  <div class="line-chart-container">
+    <canvas ref="chartCanvas"></canvas>
+  </div>
+</template>
 
-ChartJS.register(
-    Title, Tooltip, Legend,
-    LineElement, LinearScale,
-    PointElement, CategoryScale
-);
+<script>
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 export default {
-  name: 'LineChart',
-  components: { Line },
   props: {
     chartData: Object,
-    chartOptions: Object
+    options: Object
   },
-  computed: {
-    modifiedChartData() {
-      if (!this.chartData || !this.chartData.datasets) return {};
+  data() {
+    return {
+      chartInstance: null
+    };
+  },
+  watch: {
+    chartData: {
+      handler(newData) {
+        if (this.chartInstance) {
+          this.chartInstance.data = newData;
+          this.chartInstance.update();
+        } else {
+          this.renderChart();
+        }
+      },
+      deep: true
+    },
+    options: {
+      handler(newOptions) {
+        if (this.chartInstance) {
+          this.chartInstance.options = newOptions;
+          this.chartInstance.update();
+        }
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.renderChart();
+  },
+  beforeUnmount() {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+  },
+  methods: {
+    renderChart() {
+      if (!this.chartData) return;
 
-      // Глубокое клонирование данных
-      const data = JSON.parse(JSON.stringify(this.chartData));
+      const ctx = this.$refs.chartCanvas.getContext('2d');
 
-      // Добавляем tension:0.4 к каждому датасету
-      data.datasets.forEach(dataset => {
-        dataset.tension = 0.4;
+      this.chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: this.chartData,
+        options: {
+          ...this.options,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  return `День ${items[0].label}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                callback: (value, index) => {
+                  // Для месячного режима показываем только начало недели
+                  if (this.$parent.selectedPeriod === 'month') {
+                    const weekStarts = this.$parent.weekStarts || [];
+                    if (weekStarts.includes(parseInt(this.chartData.labels[index]))) {
+                      return `Неделя ${weekStarts.indexOf(parseInt(this.chartData.labels[index])) + 1}`;
+                    }
+                    return '';
+                  }
+                  return this.chartData.labels[index];
+                }
+              }
+            },
+            y: this.options.scales.y
+          }
+        }
       });
-
-      return data;
     }
   }
 };
 </script>
 
-<template>
-  <div class="line-chart-container">
-    <!-- Используем модифицированные данные -->
-    <Line :data="modifiedChartData" :options="chartOptions" />
-  </div>
-</template>
-
 <style scoped>
 .line-chart-container {
-  height: 100%;
   position: relative;
+  height: 400px;
+  width: 100%;
 }
 </style>
