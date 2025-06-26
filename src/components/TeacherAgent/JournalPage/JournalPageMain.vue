@@ -6,9 +6,9 @@
         <HeaderCell text="Группы" />
         <div v-for="group in groups" :key="group.id">
           <Cell
-              :text="group.name"
-              @click="selectGroup(group)"
-              :class="{ 'selected': selectedGroup?.id === group.id }"
+            :text="group.name"
+            :isSelected="selectedGroup?.id === group.id"
+            @click="selectGroup(group)"
           />
         </div>
       </div>
@@ -20,9 +20,9 @@
         <HeaderCell text="Предметы" />
         <div v-for="subject in subjects" :key="subject.id">
           <Cell
-              :text="subject.name"
-              @click="selectSubject(subject)"
-              :class="{ 'selected': selectedSubject?.id === subject.id }"
+            :text="subject.name"
+            :isSelected="selectedSubject?.id === subject.id"
+            @click="selectSubject(subject)"
           />
         </div>
       </div>
@@ -34,23 +34,24 @@
         <HeaderCell text="Студенты" />
         <div v-for="student in students" :key="student.id">
           <Cell
-              :text="student.name"
-              @click="selectStudent(student)"
-              :class="{ 'selected': selectedStudent?.id === student.id }"
+            :text="student.name"
+            :isSelected="selectedStudent?.id === student.id"
+            @click="selectStudent(student)"
           />
         </div>
       </div>
     </template>
-    <!-- Колонка 4: Форма с интерактивными элементами -->
+
+    <!-- Колонка 4: Журнал оценок -->
     <template #col-3>
-      <div class="custom-content">
+
         <JournalPageMarksTable
-            :selected-group="selectedGroup"
-            :selected-subject="selectedSubject"
-            :selected-student="selectedStudent"
-            :students="students"
+          :selected-group="selectedGroup"
+          :selected-subject="selectedSubject"
+          :selected-student="selectedStudent"
+          :students="students"
         />
-      </div>
+
     </template>
   </ResponsiveColumns>
 </template>
@@ -61,7 +62,7 @@ import HeaderCell from "@/components/TeacherAgent/JournalPage/HeaderCell.vue";
 import ResponsiveColumns from './ResponsiveColumns.vue';
 import Cell from "@/components/TeacherAgent/JournalPage/Cell.vue";
 import JournalPageMarksTable from "@/components/TeacherAgent/JournalPage/JournalPageMarksTable.vue";
-import {DefaultApiInstance} from "@/api/index.js";
+import { DefaultApiInstance } from "@/api/index.js";
 
 // Состояния данных
 const groups = ref([]);
