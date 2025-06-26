@@ -1,0 +1,135 @@
+<template>
+  <ResponsiveColumns>
+    <!-- Колонка 1: Группы -->
+    <template #col-0>
+      <div class="column-content">
+        <HeaderCell text="Группы" />
+        <div v-for="group in groups" :key="group.id">
+          <Cell
+              :text="group.name"
+              @click="selectGroup(group)"
+              :class="{ 'selected': selectedGroup?.id === group.id }"
+          />
+        </div>
+      </div>
+    </template>
+
+    <!-- Колонка 2: Предметы -->
+    <template #col-1>
+      <div class="column-content">
+        <HeaderCell text="Предметы" />
+        <div v-for="subject in subjects" :key="subject.id">
+          <Cell
+              :text="subject.name"
+              @click="selectSubject(subject)"
+              :class="{ 'selected': selectedSubject?.id === subject.id }"
+          />
+        </div>
+      </div>
+    </template>
+
+    <!-- Колонка 3: Студенты -->
+    <template #col-2>
+      <div class="column-content">
+        <HeaderCell text="Студенты" />
+        <div v-for="student in students" :key="student.id">
+          <Cell
+              :text="student.name"
+              @click="selectStudent(student)"
+              :class="{ 'selected': selectedStudent?.id === student.id }"
+          />
+        </div>
+      </div>
+    </template>
+    <!-- Колонка 4: Форма с интерактивными элементами -->
+    <template #col-3>
+      <div class="custom-content">
+        <JournalPageMarksTable/>
+      </div>
+    </template>
+  </ResponsiveColumns>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import HeaderCell from "@/components/TeacherAgent/JournalPage/HeaderCell.vue";
+import ResponsiveColumns from './ResponsiveColumns.vue';
+import Cell from "@/components/TeacherAgent/JournalPage/Cell.vue";
+import JournalPageMarksTable from "@/components/TeacherAgent/JournalPage/JournalPageMarksTable.vue";
+import {DefaultApiInstance} from "@/api/index.js";
+
+// Состояния данных
+const groups = ref([]);
+const subjects = ref([]);
+const students = ref([]);
+
+// Выбранные элементы
+const selectedGroup = ref(null);
+const selectedSubject = ref(null);
+const selectedStudent = ref(null);
+
+// Получаем ID преподавателя (предполагается, что он доступен)
+const teacherId = 1; // Заменить на реальный ID из системы аутентификации
+
+// Загрузка групп преподавателя
+const loadGroups = async () => {
+  try {
+    const response = await DefaultApiInstance.get(`/groups`);
+    groups.value = response.data;
+  } catch (error) {
+    console.error('Ошибка загрузки групп:', error);
+  }
+};
+
+// Загрузка предметов для выбранной группы
+const loadSubjects = async (groupId) => {
+  try {
+    const response = await DefaultApiInstance.get(`/group/${groupId}/subjects`);
+    subjects.value = response.data;
+  } catch (error) {
+    console.error('Ошибка загрузки предметов:', error);
+  }
+};
+
+// Загрузка студентов группы
+const loadStudents = async (groupId) => {
+  try {
+    const response = await DefaultApiInstance.get(`/students/${groupId}/`);
+    students.value = response.data;
+  } catch (error) {
+    console.error('Ошибка загрузки студентов:', error);
+  }
+};
+
+// Обработчики выбора
+const selectGroup = (group) => {
+  selectedGroup.value = group;
+  selectedSubject.value = null;
+  selectedStudent.value = null;
+  loadSubjects(group.id);
+  loadStudents(group.id);
+};
+
+const selectSubject = (subject) => {
+  selectedSubject.value = subject;
+};
+
+const selectStudent = (student) => {
+  selectedStudent.value = student;
+};
+
+// Инициализация при монтировании
+onMounted(() => {
+  loadGroups();
+});
+
+
+</script>
+
+<style>
+.custom-content {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+</style>
