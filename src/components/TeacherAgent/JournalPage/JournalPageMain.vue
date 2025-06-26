@@ -44,7 +44,12 @@
     <!-- Колонка 4: Форма с интерактивными элементами -->
     <template #col-3>
       <div class="custom-content">
-        <JournalPageMarksTable/>
+        <JournalPageMarksTable
+            :selected-group="selectedGroup"
+            :selected-subject="selectedSubject"
+            :selected-student="selectedStudent"
+            :students="students"
+        />
       </div>
     </template>
   </ResponsiveColumns>
@@ -69,13 +74,13 @@ const selectedSubject = ref(null);
 const selectedStudent = ref(null);
 
 // Получаем ID преподавателя (предполагается, что он доступен)
-const teacherId = 1; // Заменить на реальный ID из системы аутентификации
+const teacherId = localStorage.getItem('userId'); // Заменить на реальный ID из системы аутентификации
 
 // Загрузка групп преподавателя
 const loadGroups = async () => {
   try {
-    const response = await DefaultApiInstance.get(`/groups`);
-    groups.value = response.data;
+    const response = await DefaultApiInstance.get(`/teachers/${teacherId}`);
+    groups.value = response.data.groups;
   } catch (error) {
     console.error('Ошибка загрузки групп:', error);
   }
@@ -84,8 +89,8 @@ const loadGroups = async () => {
 // Загрузка предметов для выбранной группы
 const loadSubjects = async (groupId) => {
   try {
-    const response = await DefaultApiInstance.get(`/group/${groupId}/subjects`);
-    subjects.value = response.data;
+    const response = await DefaultApiInstance.get(`/teachers/${teacherId}`);
+    subjects.value = response.data.subjects;
   } catch (error) {
     console.error('Ошибка загрузки предметов:', error);
   }
@@ -94,8 +99,8 @@ const loadSubjects = async (groupId) => {
 // Загрузка студентов группы
 const loadStudents = async (groupId) => {
   try {
-    const response = await DefaultApiInstance.get(`/students/${groupId}/`);
-    students.value = response.data;
+    const response = await DefaultApiInstance.get(`/groups/${groupId}`);
+    students.value = response.data.students;
   } catch (error) {
     console.error('Ошибка загрузки студентов:', error);
   }
@@ -131,5 +136,10 @@ onMounted(() => {
   padding: 20px;
   background: #f8f9fa;
   border-radius: 8px;
+}
+.column-content{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 </style>
