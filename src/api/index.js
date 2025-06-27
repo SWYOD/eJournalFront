@@ -4,6 +4,6 @@ const defaultConfig ={
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem("token")}`
     },
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://swyod-ejournal--3cc0.twc1.net/'
 }
 export const DefaultApiInstance = axios.create(defaultConfig)
