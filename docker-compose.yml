@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ejournal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ejournal
+      POSTGRES_USER: ejournal_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - ejournal-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ejournal_user -d ejournal"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend
+  backend:
+    image: harbor.pixelservices.ru/ejournal/backend:latest
+    container_name: ejournal-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://ejournal_user:${POSTGRES_PASSWORD}@postgres:5432/ejournal
+      JWT_SECRET: ${JWT_SECRET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      NODE_ENV: production
+    ports:
+      - "3001:3000"
+    networks:
+      - ejournal-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "dist/health-check.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend
+  frontend:
+    image: harbor.pixelservices.ru/ejournal/frontend:latest
+    container_name: ejournal-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks:
+      - ejournal-network
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: ejournal-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    networks:
+      - ejournal-network
+    depends_on:
+      - frontend
+      - backend
+
+networks:
+  ejournal-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
